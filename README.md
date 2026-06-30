@@ -88,6 +88,33 @@ python run_review.py examples/vulnerable_app.py --out report.md
 [`examples/vulnerable_app.py`](examples/vulnerable_app.py) is a deliberately
 insecure sample with one planted bug per category — a good first target.
 
+## Visual UI — attach a GitHub repo or PR
+
+A blueprint-themed web app visualizes the pipeline running in real time: nodes
+energize, reviewer subagents spawn in parallel, wires carry "current", and
+findings stream into a ledger.
+
+```bash
+pip install -r requirements.txt -r requirements-web.txt
+uvicorn web.server:app --reload
+# open http://127.0.0.1:8000  →  paste a repo URL, a /pull/<n> URL, or owner/repo
+```
+
+Two modes, chosen automatically:
+
+| Mode | When | What runs |
+|---|---|---|
+| **LIVE** | `ANTHROPIC_API_KEY` is set | the real LangGraph, streamed via `graph.stream(stream_mode="updates")` |
+| **SCHEMATIC** | no key | a regex pre-scan ([`web/heuristics.py`](web/heuristics.py)) over the *actually fetched* code — so the visualization always plays and findings are real |
+
+Optionally set `GITHUB_TOKEN` to raise GitHub API rate limits / review private repos.
+
+How it's wired:
+- [`web/github_fetch.py`](web/github_fetch.py) turns a repo/PR URL into source files (capped, source-only).
+- [`web/review_service.py`](web/review_service.py) runs the graph per file and yields UI events.
+- [`web/server.py`](web/server.py) streams those events over **Server-Sent Events** (`GET /api/review?url=`).
+- [`web/static/`](web/static/) is a dependency-free front end (Chakra Petch + IBM Plex Mono, CSS blueprint grid, an SVG wiring diagram redrawn from live DOM rects).
+
 ## Test it (no API key needed)
 
 The test suite injects a **fake model** (`tests/conftest.py`) via the same
@@ -118,6 +145,12 @@ src/security_reviewer/
     reporter.py                     aggregate → Markdown
 examples/vulnerable_app.py          insecure sample input
 tests/                              offline tests (fake model)
+web/
+  server.py                         FastAPI app + SSE endpoint
+  github_fetch.py                   repo/PR URL -> source files
+  heuristics.py                     regex pre-scan (SCHEMATIC mode)
+  review_service.py                 run the graph, emit UI events
+  static/                           blueprint UI (index.html, style.css, app.js)
 ```
 
 ## Extending it (exercises)

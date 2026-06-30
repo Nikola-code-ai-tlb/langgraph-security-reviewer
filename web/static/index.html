@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SENTINEL // LangGraph Security Reviewer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <!-- Blueprint frame: registration ticks + corner marks drawn in CSS -->
+  <div class="frame" aria-hidden="true">
+    <span class="reg reg-tl"></span><span class="reg reg-tr"></span>
+    <span class="reg reg-bl"></span><span class="reg reg-br"></span>
+  </div>
+  <div class="scanline" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark">◇</span>
+      <div class="brand-text">
+        <h1>SENTINEL</h1>
+        <p>LANGGRAPH SECURITY REVIEW APPARATUS</p>
+      </div>
+    </div>
+    <div class="mode" id="mode-badge" data-mode="">
+      <span class="dot"></span><span id="mode-label">INIT</span>
+    </div>
+  </header>
+
+  <!-- Attach a repo or PR -->
+  <section class="console-bar">
+    <form id="review-form" autocomplete="off">
+      <div class="field">
+        <label for="target">ATTACH TARGET</label>
+        <input id="target" name="target" type="text" spellcheck="false"
+               placeholder="github.com/owner/repo  ·  …/pull/42  ·  owner/repo" />
+      </div>
+      <button type="submit" id="run-btn"><span>INITIATE REVIEW</span><i>▸</i></button>
+    </form>
+    <div class="examples">
+      <span class="examples-label">SPECIMENS</span>
+      <button class="chip" data-url="Nikola-code-ai-tlb/langgraph-security-reviewer">this repository</button>
+      <button class="chip" data-url="https://github.com/pallets/flask">pallets/flask</button>
+    </div>
+  </section>
+
+  <main class="grid">
+    <!-- LEFT: the live pipeline schematic -->
+    <section class="panel diagram-panel">
+      <div class="panel-head">
+        <h2>PIPELINE SCHEMATIC</h2>
+        <span class="panel-sub" id="diagram-sub">awaiting target</span>
+      </div>
+
+      <div class="files-rail" id="files-rail"></div>
+
+      <div class="diagram" id="diagram">
+        <svg class="wires" id="wires" preserveAspectRatio="none"></svg>
+
+        <div class="stage" data-stage="read">
+          <div class="node" id="node-read" data-state="idle">
+            <div class="node-tag">01</div>
+            <div class="node-title">READ</div>
+            <div class="node-desc">ingest source</div>
+            <div class="node-pulse"></div>
+          </div>
+        </div>
+
+        <div class="stage" data-stage="orchestrator">
+          <div class="node" id="node-orchestrator" data-state="idle">
+            <div class="node-tag">02</div>
+            <div class="node-title">ORCHESTRATOR</div>
+            <div class="node-desc">triage &amp; dispatch</div>
+            <div class="node-pulse"></div>
+          </div>
+        </div>
+
+        <div class="stage stage-reviewers" data-stage="reviewers">
+          <div class="lane-label">03 · REVIEWER SUBAGENTS</div>
+          <div class="reviewers" id="reviewers">
+            <div class="reviewers-empty" id="reviewers-empty">parallel workers spawn here</div>
+          </div>
+        </div>
+
+        <div class="stage" data-stage="reporter">
+          <div class="node" id="node-reporter" data-state="idle">
+            <div class="node-tag">04</div>
+            <div class="node-title">REPORTER</div>
+            <div class="node-desc">aggregate report</div>
+            <div class="node-pulse"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="statusline" id="statusline">
+        <span class="status-dot"></span>
+        <span id="status-text">Standby. Attach a GitHub repository or pull request.</span>
+      </div>
+    </section>
+
+    <!-- RIGHT: findings console -->
+    <section class="panel findings-panel">
+      <div class="panel-head">
+        <h2>FINDINGS LEDGER</h2>
+        <span class="panel-sub" id="findings-count">0 logged</span>
+      </div>
+
+      <div class="tally" id="tally">
+        <div class="tally-item" data-sev="critical"><b id="t-critical">0</b><span>CRIT</span></div>
+        <div class="tally-item" data-sev="high"><b id="t-high">0</b><span>HIGH</span></div>
+        <div class="tally-item" data-sev="medium"><b id="t-medium">0</b><span>MED</span></div>
+        <div class="tally-item" data-sev="low"><b id="t-low">0</b><span>LOW</span></div>
+        <div class="tally-item" data-sev="info"><b id="t-info">0</b><span>INFO</span></div>
+      </div>
+
+      <div class="findings" id="findings">
+        <div class="findings-empty" id="findings-empty">No findings yet. Initiate a review to populate the ledger.</div>
+      </div>
+
+      <div class="ledger-foot">
+        <button id="copy-report" class="ghost-btn" disabled>COPY REPORT ⧉</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Engineering title block, bottom-right, like a real blueprint -->
+  <div class="titleblock" aria-hidden="true">
+    <div class="tb-row"><span>PROJECT</span><b>SENTINEL</b></div>
+    <div class="tb-row"><span>MODULE</span><b>SEC-REVIEW</b></div>
+    <div class="tb-row"><span>ENGINE</span><b>LANGGRAPH</b></div>
+    <div class="tb-row"><span>MODE</span><b id="tb-mode">—</b></div>
+    <div class="tb-row"><span>REV</span><b>0.1</b></div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
