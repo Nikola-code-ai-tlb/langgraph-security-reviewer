@@ -30,6 +30,17 @@ import time
 from pathlib import Path
 from typing import Iterator
 
+# Load a local .env at web-server startup so ANTHROPIC_API_KEY / GITHUB_TOKEN /
+# SECURITY_REVIEWER_MODEL are available for mode detection and GitHub fetches.
+# (config.py also loads it, but only once the LLM graph is built — too late for
+# current_mode() and the GitHub token, which are read before that.)
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv()
+except ImportError:
+    pass
+
 # Make `src/` importable so we can reuse the graph package.
 _SRC = Path(__file__).resolve().parents[1] / "src"
 if str(_SRC) not in sys.path:
