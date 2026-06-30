@@ -1,0 +1,17 @@
+# Core orchestration framework — the graph runtime
+langgraph>=0.2.0
+
+# LangChain Anthropic chat model wrapper (talks to the Claude API under the hood)
+langchain-anthropic>=0.3.0
+
+# Message types (SystemMessage / HumanMessage) and base model interfaces
+langchain-core>=0.3.0
+
+# Typed, validated structured outputs from the model
+pydantic>=2.0
+
+# Loads ANTHROPIC_API_KEY from a local .env during development
+python-dotenv>=1.0
+
+# Test runner (offline tests use a fake model — no API key needed)
+pytest>=8.0
